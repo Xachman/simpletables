@@ -1,12 +1,18 @@
 #include <string>
-
+#include <sqlite3.h>
+#include "SqliteDBH.h"
+#include "Util.h"
 
 
 SqliteDBH::SqliteDBH(std::string path) {
-	this->dbFilePath = path;
-
+	this->filePath = path;
 }
 
-void SqliteDBH::openFile() {
-//	rc = sqlite3_open(this->dbFilePath, &db);
+void SqliteDBH::open() {
+	if(Util::fileExist(this->filePath)) {
+		char *zErrMsg =0;
+		int rc;
+	}else{
+
+	}
 }

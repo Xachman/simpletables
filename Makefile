@@ -4,7 +4,7 @@ LDFLAGS=-lpthread -ldl
 INCLUDES=lib/sqlite
 OBJECTS= main.o
 CPPFILES = main.cpp
-CLASSFILES = Util
+CLASSFILES = Util database/Table
 FLAGS = -lsqlite3
 EXEC = main.exe
 
@@ -13,5 +13,5 @@ all: $(OBJECTS)
 	$(CC) $(CPPFILES) $(FLAGS) -o $(EXEC)
 
 testscases: 
-	$(foreach CLASSFILES, $(CLASSFILES), $(CC) ${CLASSFILES:=.cpp} tests/${CLASSFILES:=Tests.cpp}  $(TESTFLAGS) -o ${CLASSFILES:=Tests.exe}; ./$(CLASSFILES)Tests.exe;)
+	$(CC) tests/Main.cpp  $(foreach CLASSFILES, $(CLASSFILES), ${CLASSFILES:=.cpp} tests/${CLASSFILES:=Tests.cpp} ) $(TESTFLAGS) -o tests.exe; ./tests.exe;
 

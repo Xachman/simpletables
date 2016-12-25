@@ -1,11 +1,13 @@
 #include <string>
+#include <sqlite3.h>
 
 class SqliteDBH {
 	public:
 		SqliteDBH(std::string);
+		void open();
 	private:
-		std::string dbFilePath;
-		void openFile();
-}
+		sqlite3* db;
+		std::string filePath;
+};
 
 
