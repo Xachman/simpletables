@@ -13,6 +13,6 @@ EXEC = main.exe
 all: $(OBJECTS)                                                       
 	$(CC) $(CPPFILES) $(FLAGS) -o $(EXEC)
 
-testscases: 
+testcases: 
 	$(CC) tests/Main.cpp  $(foreach CLASSFILES, $(CLASSFILES), ${CLASSFILES:=.cpp} tests/${CLASSFILES:=Tests.cpp}) $(DEPCLASSES) $(TESTFLAGS) -o tests.exe; ./tests.exe;
 
