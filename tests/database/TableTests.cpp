@@ -16,6 +16,7 @@ std::vector<Column> TestTable::columns() {
 	std::vector<Column> columns;
 	columns.push_back(Column("time", "INT"));
 	columns.push_back(Column("test_text", "TEXT"));
+	return columns;
 }
 
 bool TestTable::autoincrement() {
@@ -28,6 +29,6 @@ std::string TestTable::tableName() {
 
 TEST_CASE( "Test Create Sql", "[fileExists]" ) {
 	TestTable table;
-	std::cout << table.createTableSql();
-	REQUIRE(false);
+	INFO( "Table sql: " << table.createTableSql());
+	CHECK("CREATE TABLE IF NOT EXISTS test_table (id INTEGER PRIMARY KEY AUTOINCREMENT,time INT,test_text TEXT)" == table.createTableSql());
 };
