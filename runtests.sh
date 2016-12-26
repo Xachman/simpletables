@@ -1,4 +1,4 @@
 while true; do 
-	$1
+	make testscases
 	sleep 0.1
 done
