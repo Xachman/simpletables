@@ -4,11 +4,11 @@ LDFLAGS=-lpthread -ldl
 INCLUDES=lib/sqlite
 OBJECTS= main.o
 CPPFILES = main.cpp
-CLASSFILES = Util database/Table
+CLASSFILES = Util database/Table SqliteDBH
 DEPCLASSES = database/Column.cpp
 FLAGS = -lsqlite3
 EXEC = main.exe
-
+TESTFLAGS = $(FLAGS)
 
 all: $(OBJECTS)                                                       
 	$(CC) $(CPPFILES) $(FLAGS) -o $(EXEC)

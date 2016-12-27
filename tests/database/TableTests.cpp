@@ -5,12 +5,21 @@
 #include "../../database/Table.h"
 #include "../../database/Column.h"
 
+
 class TestTable : public Table {
+	public:
+		std::vector<Column> columns();
+		bool autoincrement();
+		std::string tableName();
+};
+
+class TestTable2 : public Table {
 	public:
 		std::vector<Column> columns();
 		bool autoincrement();
 		std::string tableName();	
 };
+
 
 std::vector<Column> TestTable::columns() {
 	std::vector<Column> columns;
@@ -27,13 +36,6 @@ std::string TestTable::tableName() {
 	return "test_table";
 }
 
-
-class TestTable2 : public Table {
-	public:
-		std::vector<Column> columns();
-		bool autoincrement();
-		std::string tableName();	
-};
 
 std::vector<Column> TestTable2::columns() {
 	std::vector<Column> columns;
