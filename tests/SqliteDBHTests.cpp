@@ -76,10 +76,11 @@ TEST_CASE("Test Select", "[execute]") {
 	std::string sql = 	"SELECT * FROM clients_table;";
 	std::vector<std::map<std::string,std::string> > rows =  dbh.execute(sql);
 	for(int i = 0; i < rows.size(); i++) {
-		INFO("Row Loop");
-		std::map<std::string, std::string> rowMap;
-		INFO(rowMap["first_name"]);
+		std::map<std::string, std::string> rowMap = rows[i];
+		WARN(rowMap["first_name"]);
 	}
+	INFO(rows.size());
+	dbh.execute("DROP TABLE clients_table");
 	REQUIRE(false);
 	dbh.close();
 }
