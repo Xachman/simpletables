@@ -3,6 +3,8 @@
 #include <sqlite3.h>
 #include <vector>
 #include <map>
+#include "database/Row.h"
+#include "database/Entry.h"
 #include "SqliteDBH.h"
 #include "Util.h"
 #include <stdexcept>
@@ -23,7 +25,7 @@ void SqliteDBH::open() {
 	}
 }
 
- std::vector<std::map<std::string,std::string> >SqliteDBH::execute(std::string sql) {
+ std::vector<Row> SqliteDBH::execute(std::string sql) {
 	char *zErrMsg = 0;
 	int rc;
 	rc = sqlite3_exec(this->db, sql.c_str(), this->callback, this, &zErrMsg);
@@ -36,12 +38,12 @@ void SqliteDBH::open() {
 
 int SqliteDBH::callback(void *data, int argc, char **argv, char **azColName){
 	int i;
-	std::map<std::string,std::string> rowMap;
+	Row row;
 	SqliteDBH* dbhObj = reinterpret_cast<SqliteDBH*>(data);
 	for(i=0; i<argc; i++){
-	   		rowMap[azColName[i]] = argv[i] ? argv[i] : "NULL";
+	   		row.add(Entry(azColName[i], argv[i] ? argv[i] : "NULL")); 
 	}
-	dbhObj->rows.push_back(rowMap);
+	dbhObj->rows.push_back(row);
 	return 0;
 }
 
