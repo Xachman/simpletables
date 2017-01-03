@@ -10,6 +10,6 @@ class DatabaseHelper {
 		bool createTable(Table& table)
 		Row getById(int id, Table& table);
 		int id insert(std::vector<Entry>);
-}
+};
 
 #endif

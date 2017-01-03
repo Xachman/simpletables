@@ -5,33 +5,7 @@
 #include <vector>
 #include <map>
 #include <string>
-
-class ClientsTable : public Table {
-	public:
-		std::vector<Column> columns();
-		bool autoincrement();
-		std::string tableName();
-};
-
-
-
-std::vector<Column> ClientsTable::columns() {
-	std::vector<Column> columns;
-	columns.push_back(Column("first_name", "TEXT"));
-	columns.push_back(Column("last_name", "TEXT"));
-	columns.push_back(Column("address", "TEXT"));
-	columns.push_back(Column("phone", "TEXT"));
-	columns.push_back(Column("email", "TEXT"));
-	return columns;
-}
-
-bool ClientsTable::autoincrement() {
-	return true;
-}
-
-std::string ClientsTable::tableName() {
-	return "clients_table";
-}
+#include "../mocks/ClientsTable.h"
 
 TEST_CASE( "Test File Open", "[fileOpen]" ) {
 
@@ -88,7 +62,6 @@ TEST_CASE("Test sql functions", "[execute]") {
 		std::vector<Row> rows =  dbh.execute(sql);
 		for(int i = 0; i < rows.size(); i++) {
 			Row row = rows[i];
-			WARN(row.findEntry("first_name").getValue());
 			REQUIRE(row.findEntry("first_name").getValue() == "Tim");
 			REQUIRE(row.findEntry("last_name").getValue() == "Dailey");
 			REQUIRE(row.findEntry("address").getValue() == "Gay Street");
