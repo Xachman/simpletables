@@ -1,3 +1,5 @@
+#ifndef SQLITEDBH_H
+#define SQLITEDBH_H
 #include <string>
 #include <map>
 #include <vector>
@@ -17,4 +19,4 @@ class SqliteDBH {
 		static int callback(void *data, int argc, char **argv, char **azColName);
 };
 
-
+#endif

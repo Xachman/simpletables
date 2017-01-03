@@ -1,11 +1,11 @@
 #include <string>
+#include <vector>
 #include "Column.h"
 
 class Table {
-	private:
+	public:
+		std::string createTableSql();
 		virtual bool autoincrement() = 0;
 		virtual std::string tableName() = 0;
 		virtual std::vector<Column> columns() = 0;
-	public:
-		std::string createTableSql();
 };
