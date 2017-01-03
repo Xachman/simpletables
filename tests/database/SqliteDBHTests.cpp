@@ -1,7 +1,7 @@
-#include "catch.h"
-#include "../SqliteDBH.h"
-#include "../database/Table.h"
-#include "../database/Row.h"
+#include "../catch.h"
+#include "../../database/SqliteDBH.h"
+#include "../../database/Table.h"
+#include "../../database/Row.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -78,12 +78,7 @@ TEST_CASE("Test sql functions", "[execute]") {
 							 "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');"\
 							 "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');";
 		std::vector<Row> rows =  dbh.execute(sql);
-		for(int i = 0; i < rows.size(); i++) {
-			INFO("Row Loop");
-			std::map<std::string, std::string> rowMap;
-			INFO(rowMap["first_name"]);
-		}
-		REQUIRE(false);
+		REQUIRE(rows.size() == 0);
 		dbh.close();
 	}
 
