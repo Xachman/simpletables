@@ -29,6 +29,9 @@ std::vector<Row> DatabaseHelper::getAll(Table& table) {
 	return rows;
 }
 
+std::vector<Row> DatabaseHelper::query(const std::string& sql) {
+	return this->dbh.execute(sql);
+}
 
 Row DatabaseHelper::getById(int id, Table& table) {
 	std::stringstream ss;

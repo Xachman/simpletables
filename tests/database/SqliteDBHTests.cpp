@@ -21,7 +21,6 @@ TEST_CASE( "Test File Open", "[fileOpen]" ) {
 	}
 };
 
-ClientsTable table;
 TEST_CASE("Test sql functions", "[execute]") {
 	struct TestSetup {
 		static SqliteDBH setupDBH() {
@@ -29,19 +28,23 @@ TEST_CASE("Test sql functions", "[execute]") {
 			dbh.open();
 			return dbh;
 		}
+		static ClientsTable table() {
+			ClientsTable table;
+			return table;
+		}
 	};
 	SECTION("Test Create db") {
 		SqliteDBH dbh = TestSetup::setupDBH();
-		std::vector<Row> rows = dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+table.tableName()+"'");
+		std::vector<Row> rows = dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+TestSetup::table().tableName()+"'");
 		for(int i = 0; i < rows.size(); i++) {
 			Row row = rows[i];
 			REQUIRE(row.findEntry("name").getValue() == "");
 		}
-		dbh.execute(table.createTableSql());
-		rows = dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+table.tableName()+"'");
+		dbh.execute(TestSetup::table().createTableSql());
+		rows = dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+TestSetup::table().tableName()+"'");
 		for(int i = 0; i < rows.size(); i++) {
 			Row row = rows[i];
-			REQUIRE(row.findEntry("name").getValue() == table.tableName());
+			REQUIRE(row.findEntry("name").getValue() == TestSetup::table().tableName());
 		}
 		dbh.close();
 	}
@@ -69,7 +72,7 @@ TEST_CASE("Test sql functions", "[execute]") {
 			REQUIRE(row.findEntry("email").getValue() == "test@test.com");
 		}
 		INFO(rows.size());
-		dbh.execute("DROP TABLE "+table.tableName());
+		dbh.execute("DROP TABLE "+TestSetup::table().tableName());
 		dbh.close();
 	}
 }

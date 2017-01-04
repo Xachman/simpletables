@@ -13,6 +13,7 @@ class DatabaseHelper {
 		DatabaseHelper(const std::string& file);
 		void open();
 		bool createTable(Table& table);
+		std::vector<Row> query(const std::string&);
 		Row getById(int id, Table& table);
 		std::vector<Row> getAll(Table& table);
 		std::string insert(Row&, Table&);

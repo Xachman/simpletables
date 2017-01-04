@@ -1,5 +1,7 @@
 #ifndef CLIENTSMOCK_H
 #define CLIENTSMOCK_H
+#include "../../database/Column.h"
+#include "../../database/Table.h"
 #include <string>
 #include <vector>
 
@@ -11,23 +13,3 @@ class ClientsTable : public Table {
 };
 
 #endif
-
-std::vector<Column> ClientsTable::columns() {
-	std::vector<Column> columns;
-	columns.push_back(Column("first_name", "TEXT"));
-	columns.push_back(Column("last_name", "TEXT"));
-	columns.push_back(Column("address", "TEXT"));
-	columns.push_back(Column("phone", "TEXT"));
-	columns.push_back(Column("email", "TEXT"));
-	return columns;
-}
-
-bool ClientsTable::autoincrement() {
-	return true;
-}
-
-std::string ClientsTable::tableName() {
-	return "clients_table";
-}
-
-
