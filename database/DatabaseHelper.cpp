@@ -1,3 +1,4 @@
+#include "../tests/catch.h"
 #include "DatabaseHelper.h"
 #include "SqliteDBH.h"
 #include <string>
@@ -39,7 +40,7 @@ Row DatabaseHelper::getById(int id, Table& table) {
 	std::vector<Row> rows = this->dbh.execute("SELECT * FROM "+table.tableName()+" WHERE id="+ss.str());
 	return rows[0];
 }
-std::string DatabaseHelper::insert(Row& row, Table& table) {
+int DatabaseHelper::insert(Row& row, Table& table) {
 	std::vector<Column> columns = table.columns();
 	std::stringstream columnSql;
 	std::stringstream valueSql;
@@ -49,13 +50,12 @@ std::string DatabaseHelper::insert(Row& row, Table& table) {
 		std::string val="";
 		try {
 			val = row.findEntry(column.name()).getValue();	
-		} catch (const std::exception& e) {
-
+		} catch (const char* e) {
 		}
-
 		if(column.type() != "INT") {
 			val = "'"+val+"'";
 		}
+		valueSql << val;
 		if((i+1) < columns.size()) {
 			columnSql << ",";
 			valueSql << ",";
@@ -65,11 +65,14 @@ std::string DatabaseHelper::insert(Row& row, Table& table) {
 
 	this->dbh.execute("INSERT INTO "+table.tableName()+" ("+columnSql.str()+") VALUES ("+valueSql.str()+");");
 	
-	std::vector<Row> rows = this->dbh.execute("SELECT * FROM "+table.tableName()+" ORDER BY id DESC LIMIT 1");
+	std::vector<Row> rows = this->dbh.execute("SELECT * FROM "+table.tableName()+"");
 	try {
-		return rows[0].findEntry("id").getValue();
-	} catch(const std::exception& e) {
-		return "0";
+		std::stringstream ss(rows[0].findEntry("id").getValue());
+		int id;
+		ss >> id;
+		return id;
+	} catch(const char* e) {
+		return -1;
 	}
 }
 void DatabaseHelper::close() {

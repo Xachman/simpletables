@@ -16,7 +16,7 @@ class DatabaseHelper {
 		std::vector<Row> query(const std::string&);
 		Row getById(int id, Table& table);
 		std::vector<Row> getAll(Table& table);
-		std::string insert(Row&, Table&);
+		int insert(Row&, Table&);
 		void close();
 };
 

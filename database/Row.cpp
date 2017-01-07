@@ -9,7 +9,7 @@ Entry& Row::findEntry(const std::string& columnName) {
 			return cEntry;
 		}	
 	}
-	throw("No Entry Found");
+	throw "No Entry Found";
 
 }
 
