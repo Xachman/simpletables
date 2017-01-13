@@ -1,7 +1,8 @@
 #include <windows.h>  
 #include <stdlib.h>  
 #include <string.h>  
-#include <tchar.h>  
+#include <tchar.h> 
+#include "resource.h" 
   
 // Global variables  
   
@@ -23,7 +24,8 @@ int CALLBACK WinMain(
     _In_ int       nCmdShow  
 )  
 {  
-    WNDCLASSEX wcex;  
+    WNDCLASSEX wcex; 
+	HMENU hSysMenu; 
   
     wcex.cbSize = sizeof(WNDCLASSEX);  
     wcex.style          = CS_HREDRAW | CS_VREDRAW;  
