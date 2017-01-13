@@ -3,7 +3,7 @@
 #include <string>
 
 Entry& Row::findEntry(const std::string& columnName) {
-	for(int i = 0; i < this->entries.size(); i++) {
+	for(std::size_t i = 0; i < this->entries.size(); i++) {
 		Entry& cEntry = this->entries[i];
 		if(columnName == cEntry.getColumnName()) {
 			return cEntry;

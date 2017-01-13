@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-DatabaseHelper::DatabaseHelper(const std::string& path):dbh(path), path(path) {
+DatabaseHelper::DatabaseHelper(const std::string& path):path(path), dbh(path) {
 }
 
 void DatabaseHelper::open() {
@@ -16,7 +16,7 @@ bool DatabaseHelper::createTable(Table& table) {
 	this->dbh.execute(table.createTableSql());
 
 	std::vector<Row> rows = this->dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+table.tableName()+"'");
-	for(int i = 0; i < rows.size(); i++) {
+	for(std::size_t i = 0; i < rows.size(); i++) {
 		if(rows[i].findEntry("name").getValue() == table.tableName()) {
 			return true;
 		}
@@ -44,7 +44,7 @@ int DatabaseHelper::insert(Row& row, Table& table) {
 	std::vector<Column> columns = table.columns();
 	std::stringstream columnSql;
 	std::stringstream valueSql;
-	for(int i = 0; i < columns.size(); i++) {
+	for(std::size_t i = 0; i < columns.size(); i++) {
 		Column column = columns[i];
 		columnSql << column.name();
 		std::string val="";
