@@ -26,5 +26,8 @@ single_objects:
 	 $(foreach DEPCLASSES, $(DEPCLASSES), $(CC) -c -Wall -Werror -fpic $(DEPCLASSES).cpp -o objects/$(DEPCLASSES).o;) $(foreach CLASSFILES, $(CLASSFILES), $(CC) -c -Wall -Werror -fpic $(CLASSFILES).cpp -o objects/$(CLASSFILES).o;)
 
 create_lib: 
-	$(CC) -shared -o dist/linux/libsimpletables.so $(foreach DEPCLASSES, $(DEPCLASSES), objects/$(DEPCLASSES).o) $(foreach CLASSFILES, $(CLASSFILES),  objects/$(CLASSFILES).o)
- 
+	$(CC) -shared  -o dist/linux/liblinuxsimpletables.so $(foreach DEPCLASSES, $(DEPCLASSES), objects/$(DEPCLASSES).o) $(foreach CLASSFILES, $(CLASSFILES),  objects/$(CLASSFILES).o) -lsqlite3
+
+
+create_node_linux_lib:
+	$(CC) -Wall -Werror -fpic -c nodeexport.cpp -o objects/nodeexport.o; g++ -shared objects/nodeexport.o -Ldist/linux/ -llinuxsimpletables -o dist/node/linux/libnodelinuxsimpletables.so
