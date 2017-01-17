@@ -7,6 +7,7 @@ OBJECTS= main.o
 CPPFILES = main.cpp
 CLASSFILES = Util database/Table database/Entry database/Row database/SqliteDBH database/DatabaseHelper
 DEPCLASSES = database/Column
+TESTDEPS = tests/mocks/ClientsTable
 LIBFLAGS = -lsqlite3
 FLAGS = $(LIBFLAGS)
 EXEC = main.exe
@@ -16,7 +17,7 @@ TESTFLAGS = $(FLAGS)
 #	$(CC) $(CPPFILES) $(FLAGS) -o $(EXEC)
 
 testcases: 
-	$(CC) tests/Main.cpp  $(foreach CLASSFILES, $(CLASSFILES), ${CLASSFILES:=.cpp} tests/${CLASSFILES:=Tests.cpp}) $(foreach DEPCLASSES, $(DEPCLASSES), $(DEPCLASSES).cpp) $(TESTFLAGS) -o tests.exe; ./tests.exe;
+	$(CC) tests/Main.cpp  $(foreach TESTDEPS, $(TESTDEPS), ${TESTDEPS:=.cpp}) $(foreach CLASSFILES, $(CLASSFILES), ${CLASSFILES:=.cpp} tests/${CLASSFILES:=Tests.cpp}) $(foreach DEPCLASSES, $(DEPCLASSES), $(DEPCLASSES).cpp) $(TESTFLAGS) -o tests.exe; ./tests.exe;
 
 
 windows32:
