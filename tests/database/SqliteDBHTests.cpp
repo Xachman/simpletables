@@ -48,7 +48,19 @@ TEST_CASE("Test sql functions", "[execute]") {
 		}
 		dbh.close();
 	}
+	SECTION("Test Prepared Insert") {
+		SqliteDBH dbh = TestSetup::setupDBH();
+		std::string prep = "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ( ?, ?, ?, ?, ?)";
+		sglite3_stmt* stmt = dbh.prepare(prep);
 
+		dbh.bindText(1, "Tim", stmt);
+		dbh.bindText(2, "Daily", stmt);
+		dbh.bindText(1, "Gay Street", stmt);
+		dbh.bindText(1, "1234567890", stmt);
+		dbh.bindText(1, "firsttest@test.com", stmt);
+
+		dbh.executeStmt(stmt);
+	}
 	SECTION("Test Insert") {
 		SqliteDBH dbh = TestSetup::setupDBH();
 		std::string sql = 	"INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');"\

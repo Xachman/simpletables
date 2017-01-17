@@ -12,6 +12,10 @@ class SqliteDBH {
 		void open();
 		std::vector<Row>	execute(std::string sql);
 		void close();
+		sqlite3_stmt* prepare(std::string);
+		void bindText(int, const std::string&, sqlite3_stmt*);
+		void executeStmt(sqlite3_stmt*);
+		sqlite3_int64 lastId();
 	private:
 		sqlite3* db;
 		std::vector<Row> rows;

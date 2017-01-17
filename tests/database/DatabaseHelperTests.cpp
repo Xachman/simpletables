@@ -37,6 +37,17 @@ TEST_CASE("Test Table CRUD", "[crud]") {
 		REQUIRE(returnRow.findEntry("id").getValue() == ss.str());
 	}
 
+	SECTION("Test insert with apostrophe") {
+		DatabaseHelper dbh = ts.setupDBH();
+		Row row;
+		row.add(Entry("first_name", "tim"));
+		row.add(Entry("last_name", "Dailey's"));
+		int id = dbh.insert(row, ts.table);
+		dbh.close();
+
+		REQUIRE(true);
+	}
+
 	SECTION("Get all") {
 		DatabaseHelper dbh = ts.setupDBH();
 		std::vector<Row> rows = dbh.getAll(ts.table);
@@ -48,7 +59,6 @@ TEST_CASE("Test Table CRUD", "[crud]") {
 		dbh.query("DROP TABLE IF EXISTS "+ts.table.tableName());
 		dbh.close();
 	}
-
 
 
 }
