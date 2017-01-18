@@ -5,6 +5,7 @@
 #include <vector>
 #include <sqlite3.h>
 #include "Row.h"
+#include "SqliteStmt.h"
 
 class SqliteDBH {
 	public:
@@ -12,9 +13,9 @@ class SqliteDBH {
 		void open();
 		std::vector<Row>	execute(std::string sql);
 		void close();
-		sqlite3_stmt* prepare(std::string);
+		SqliteStmt prepare(std::string);
 		void bindText(int, const std::string&, sqlite3_stmt*);
-		void executeStmt(sqlite3_stmt*);
+		void executeStmt(SqliteStmt);
 		sqlite3_int64 lastId();
 	private:
 		sqlite3* db;

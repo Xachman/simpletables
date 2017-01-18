@@ -1,5 +1,6 @@
 #include "../catch.h"
 #include "../../database/SqliteDBH.h"
+#include "../../database/SqliteStmt.h"
 #include "../../database/Table.h"
 #include "../../database/Row.h"
 #include <vector>
@@ -51,15 +52,17 @@ TEST_CASE("Test sql functions", "[execute]") {
 	SECTION("Test Prepared Insert") {
 		SqliteDBH dbh = TestSetup::setupDBH();
 		std::string prep = "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ( ?, ?, ?, ?, ?)";
-		sglite3_stmt* stmt = dbh.prepare(prep);
+		SqliteStmt stmt = dbh.prepare(prep);
 
-		dbh.bindText(1, "Tim", stmt);
-		dbh.bindText(2, "Daily", stmt);
-		dbh.bindText(1, "Gay Street", stmt);
-		dbh.bindText(1, "1234567890", stmt);
-		dbh.bindText(1, "firsttest@test.com", stmt);
+		stmt.bindText(1, "Tom");
+		stmt.bindText(2, "Daily");
+		stmt.bindText(3, "Gay Street");
+		stmt.bindText(4, "1234567890");
+		stmt.bindText(5, "firsttest@test.com");
 
 		dbh.executeStmt(stmt);
+		std::string result;
+		REQUIRE(result == "Tom");
 	}
 	SECTION("Test Insert") {
 		SqliteDBH dbh = TestSetup::setupDBH();

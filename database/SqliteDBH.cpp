@@ -35,14 +35,14 @@ void SqliteDBH::open() {
 	return this->rows;
 }
 
-sqlite3_stmt* SqliteDBH::prepare(std::string sql) {
+SqliteStmt SqliteDBH::prepare(std::string sql) {
 	sqlite3_stmt* stmt;	
 	int rc;
 	rc = sqlite3_prepare_v2(this->db, sql.c_str(), -1, &stmt, NULL);
 	if(SQLITE_OK != rc) {
 		throw std::invalid_argument("Can't prepare insert statment: " + std::string(sqlite3_errmsg(db)));
 	}
-	return stmt;
+	return SqliteStmt(stmt, this->db);
 }
 
 int SqliteDBH::callback(void *data, int argc, char **argv, char **azColName){
@@ -56,20 +56,13 @@ int SqliteDBH::callback(void *data, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-void SqliteDBH::bindText(int position, const std::string& text, sqlite3_stmt* stmt) {
-	int rc;
-	rc = sqlite3_bind_text(stmt, 2, text.c_str(), sizeof(text.c_str()), NULL);
-	if(SQLITE_OK != rc) {
-		throw std::invalid_argument("Can't prepare insert statment: " + std::string(sqlite3_errmsg(db)));
-	}
-}
 
-void SqliteDBH::executeStmt(sqlite3_stmt* stmt) {
+void SqliteDBH::executeStmt(SqliteStmt stmt) {
 	int rc;	
-	rc = sqlite3_step(stmt);
-	sqlite3_finalize(stmt);
+	rc = sqlite3_step(stmt.getStmt());
+	sqlite3_finalize(stmt.getStmt());
 	if(SQLITE_DONE != rc) {
-		throw std::invalid_argument("Can't prepare insert statment: " + std::string(sqlite3_errmsg(db)));
+		throw std::invalid_argument("Can't prepare insert statment: " + std::string(sqlite3_errmsg(this->db)));
 	} 
 }
 sqlite3_int64 SqliteDBH::lastId() {
