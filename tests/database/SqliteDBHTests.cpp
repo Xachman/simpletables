@@ -24,18 +24,26 @@ TEST_CASE( "Test File Open", "[fileOpen]" ) {
 
 TEST_CASE("Test sql functions", "[execute]") {
 	struct TestSetup {
-		static SqliteDBH setupDBH() {
+		static SqliteDBH setupDBH(bool createTable) {
 			SqliteDBH dbh("tests/mocks/test.db");
 			dbh.open();
+			dbh.execute("DROP TABLE IF EXISTS "+TestSetup::table().tableName());
+			if(createTable) {
+				dbh.execute(TestSetup::table().createTableSql());
+			}
 			return dbh;
 		}
 		static ClientsTable table() {
 			ClientsTable table;
 			return table;
 		}
+		static void cleanup(SqliteDBH dbh) {
+			dbh.execute("DROP TABLE IF EXISTS "+TestSetup::table().tableName());
+			dbh.close();
+		}
 	};
 	SECTION("Test Create db") {
-		SqliteDBH dbh = TestSetup::setupDBH();
+		SqliteDBH dbh = TestSetup::setupDBH(false);
 		std::vector<Row> rows = dbh.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='"+TestSetup::table().tableName()+"'");
 		for(int i = 0; i < rows.size(); i++) {
 			Row row = rows[i];
@@ -47,10 +55,10 @@ TEST_CASE("Test sql functions", "[execute]") {
 			Row row = rows[i];
 			REQUIRE(row.findEntry("name").getValue() == TestSetup::table().tableName());
 		}
-		dbh.close();
+		TestSetup::cleanup(dbh);
 	}
 	SECTION("Test Prepared Insert") {
-		SqliteDBH dbh = TestSetup::setupDBH();
+		SqliteDBH dbh = TestSetup::setupDBH(true);
 		std::string prep = "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ( ?, ?, ?, ?, ?)";
 		SqliteStmt stmt = dbh.prepare(prep);
 
@@ -61,21 +69,27 @@ TEST_CASE("Test sql functions", "[execute]") {
 		stmt.bindText(5, "firsttest@test.com");
 
 		dbh.executeStmt(stmt);
+
+		std::string sql = "SELECT last_insert_rowid();";
+
+		std::vector<Row> rows = dbh.execute(sql);
+	//TODO: this is the id (rows[0].findEntryIndex(0).getValue());
 		std::string result;
 		REQUIRE(result == "Tom");
+		TestSetup::cleanup(dbh);
 	}
 	SECTION("Test Insert") {
-		SqliteDBH dbh = TestSetup::setupDBH();
+		SqliteDBH dbh = TestSetup::setupDBH(true);
 		std::string sql = 	"INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');"\
 							 "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');"\
 							 "INSERT INTO clients_table (first_name, last_name, address, phone, email) VALUES ('Tim', 'Dailey', 'Gay Street', '1234567789', 'test@test.com');";
 		std::vector<Row> rows =  dbh.execute(sql);
 		REQUIRE(rows.size() == 0);
-		dbh.close();
+		TestSetup::cleanup(dbh);
 	}
 
 	SECTION("Test Select") {
-		SqliteDBH dbh = TestSetup::setupDBH();
+		SqliteDBH dbh = TestSetup::setupDBH(true);
 		std::string sql = 	"SELECT * FROM clients_table;";
 		std::vector<Row> rows =  dbh.execute(sql);
 		for(int i = 0; i < rows.size(); i++) {
@@ -87,7 +101,6 @@ TEST_CASE("Test sql functions", "[execute]") {
 			REQUIRE(row.findEntry("email").getValue() == "test@test.com");
 		}
 		INFO(rows.size());
-		dbh.execute("DROP TABLE "+TestSetup::table().tableName());
-		dbh.close();
+		TestSetup::cleanup(dbh);
 	}
 }
