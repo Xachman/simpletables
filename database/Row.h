@@ -9,6 +9,8 @@ class Row {
 		std::vector<Entry> entries;
 	public:
 		Entry& findEntry(const std::string&);
+		Entry& findEntryIndex(const int&);
+		std::size_t size();
 		void add(Entry);
 };
 #endif
